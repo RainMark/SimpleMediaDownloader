@@ -41,5 +41,9 @@ class SimpleQQDownloader(object):
             self.Download(download_list, songs)
 
 if __name__ == '__main__':
-    app = SimpleQQDownloader()
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+        app = SimpleQQDownloader(path)
+    else:
+        app = SimpleQQDownloader()
     app.run()
