@@ -1,6 +1,6 @@
 # sqd
 
-simple qq music downoader
+Simple QQ music downloader
 
 #### Usage
 ```sh
