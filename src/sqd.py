@@ -26,7 +26,6 @@ class SimpleQQDownloader(object):
 
             print("Searching...")
             songs = self.searcher.Search(key)
-            print(songs)
             print("I find some music ^0^")
             i = 0
             for x in songs:
