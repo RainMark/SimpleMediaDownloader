@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import os, hashlib, shutil, json, logging
-from urllib import request, parse
+from urllib import request, parse, error
 
 class MusicApi(object):
     def __init__(self, api_type = 'qq'):
@@ -20,6 +20,9 @@ class MusicApi(object):
         return wrapper
 
     @network_check
+    def open_url(self, url):
+        return request.urlopen(url).read()
+
     def SearchRequest(self, search_key, limit, page):
         data = dict()
         data['key'] = search_key
@@ -27,17 +30,23 @@ class MusicApi(object):
         data['page'] = page
         encode_data = parse.urlencode(data, quote_via = parse.quote_plus)
         request_url = self.search_uri + encode_data
-        json_data = request.urlopen(request_url).read()
-        return json.loads(json_data)
+        json_data = self.open_url(request_url)
+        if json_data:
+            return json.loads(json_data.decode('utf-8'))
 
-    @network_check
     def GetSongUri(self, id):
         encode_data = parse.urlencode({'id':id}, quote_via = parse.quote_plus)
         request_url = self.download_uri + encode_data
-        json_data = request.urlopen(request_url).read()
-        loaded_data = json.loads(json_data)
-        if loaded_data['success']:
-            return {id:loaded_data['url']}
+
+        json_data = self.open_url(request_url)
+        if not json_data:
+            return
+
+        loaded_data = json.loads(json_data.decode('utf-8'))
+        if not loaded_data['success']:
+            return
+
+        return {id:loaded_data['url']}
 
     def CreateFileNameFromJson(self, json_data):
         artists = json_data['artists'][0]['name']

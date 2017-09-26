@@ -9,15 +9,17 @@ class Searcher(object):
         self.api = MusicApi()
 
     def Search(self, key):
-        search_result = self.api.SearchRequest(key, 5, 1)
-        if search_result['success'] != True:
+        result = self.api.SearchRequest(key, 5, 1)
+        if not result or result['success'] != True:
             return
-        song_list = search_result['songList']
+
+        song_list = result['songList']
         song_url_list = list()
         for song in song_list:
             filename = self.api.CreateFileNameFromJson(song)
             song_url = self.api.GetSongUri(song['id'])
             song_url_list.append({filename:song_url})
+
         return song_url_list
 
 if __name__ == '__main__':

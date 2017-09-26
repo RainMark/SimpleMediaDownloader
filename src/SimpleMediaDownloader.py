@@ -7,10 +7,10 @@ from flask import Flask
 from flask import request
 from flask import Response
 from flask import send_file
-from jinja2 import Environment, PackageLoader, select_autoescape
 
 from Searcher import Searcher
 from Downloader import Downloader
+from Template import Template
 
 class SimpleMediaDownloader(object):
     def __init__(self, download_dir = '~/sqdownload'):
@@ -67,14 +67,20 @@ def api_v1_search():
 
 
     result = downloader.searcher.Search(kv_pair['key'])
-    env = Environment(loader = PackageLoader('SimpleMediaDownloader', 'templates'),
-                      autoescape = select_autoescape(['html', 'xml']))
-    template = env.get_template('web/template/table.jinja2')
-    html = '<tbody id=\"table-body\">\n'
-    for name, url_dict in result.items():
-        html += template.render(ID = url_dict.values[0], NAME = name)
+    if not result:
+        return api_v1_error()
 
-    html += '</tbody>\n'
+    path = os.path.abspath('web/template/table.template')
+    html_template = Template()
+    html_template.load_from_file(path)
+
+    html = '<tbody id=\"table-body\">'
+    for x in result:
+        name = list(x.keys())[0]
+        _id = list(x[name].keys())[0];
+        html += html_template.render(_id = _id, name = name)
+    html += '</tbody>'
+
     return Response(response = html, status = 200)
 
 
