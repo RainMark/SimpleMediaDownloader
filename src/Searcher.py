@@ -2,12 +2,11 @@
 
 import json
 
-import musicapi
-import downloader
+from MusicApi import MusicApi
 
 class Searcher(object):
     def __init__(self):
-        self.api = musicapi.MusicApi()
+        self.api = MusicApi()
 
     def Search(self, key):
         search_result = self.api.SearchRequest(key, 5, 1)

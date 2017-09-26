@@ -3,7 +3,7 @@
 import os, json, shutil, logging
 from urllib import request, parse
 
-import musicapi
+import MusicApi
 
 class Downloader(object):
     def __init__(self, download_dir):
@@ -12,7 +12,7 @@ class Downloader(object):
         if not retval:
             os.mkdir(self.download_dir)
 
-    @musicapi.MusicApi.network_check
+    @MusicApi.MusicApi.network_check
     def DownloadSingle(self, filename,  url):
         path = os.path.join(self.download_dir, filename + '.mp3')
         with request.urlopen(url) as f:
