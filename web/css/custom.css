@@ -1,0 +1,47 @@
+.container {
+    max-width: 800px;
+}
+.description {
+    margin-top: 2rem;
+    text-align: center;
+}
+.entry {
+    font-size: 18px;
+    margin-top:3rem;
+    text-align: center;
+}
+.submit-button {
+    text-align: left;
+}
+
+.input-entry {
+    /* margin-left: 8rem; */
+    /* margin-right: 20rem; */
+    /* width: 80%; */
+    /* text-align: center; */
+}
+
+.button {
+    margin-bottom: 0;
+}
+
+.list {
+    font-size: 12px;
+}
+
+input[type="download"] {
+    height: 20px;
+    padding: 0 0px;
+    width: 50px;
+    font-size: 7px;
+    text-transform: unset;
+}
+
+th, td {
+    text-align: center;
+}
+
+#key-input-entry {
+    border-radius: 0;
+    font-size: 12px;
+}
