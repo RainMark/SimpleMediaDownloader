@@ -7,6 +7,7 @@ from flask import Flask
 from flask import request
 from flask import Response
 from flask import send_file
+from flask_cors import CORS
 
 from Searcher import Searcher
 from Downloader import Downloader
@@ -54,6 +55,7 @@ class SimpleMediaDownloader(object):
 
 global downloader
 app = Flask(__name__)
+CORS(app)
 
 def api_v1_error():
     return Response(response = '<h4>Error</h4>', status = 200)
