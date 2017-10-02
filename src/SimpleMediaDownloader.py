@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import os, sys, logging
-import argparse
+import argparse, io
 
 from flask import Flask
 from flask import request
@@ -85,7 +85,23 @@ def api_v1_search():
 
     return Response(response = html, status = 200)
 
+@app.route('/api/v1/download', methods = ['POST'])
+def api_v1_download():
+    print(request.form)
+    kv_pair = request.form
+    if not kv_pair.get('id'):
+        return api_v1_error()
 
+    url = downloader.searcher.api.GetSongUri(kv_pair['id'])
+    if not url:
+        return api_v1_error()
+
+    binary_data = downloader.searcher.api.open_url(url[kv_pair['id']])
+    if not binary_data:
+        return api_v1_error()
+
+    byte_buffer = io.BytesIO(binary_data)
+    return send_file(byte_buffer, mimetype = 'audio/mpeg')
 
 
 if __name__ == '__main__':

@@ -1,41 +1,54 @@
 $(document).ready(function() {
 
-    var download_bind = false
-    var key = ""
-    var ajax_request = new XMLHttpRequest()
+    var file_name = '';
+    var ajax_request = new XMLHttpRequest();
 
     function init() {
         $("#do_submit").on("click", do_submit);
-        $("input[type='download']").on("click", do_download);
     }
 
     function do_submit() {
-        key = $("#key-input-entry").val();
-        if (key != "") {
-            if (!download_bind) {
-                download_bind = true;
-            }
-            ajax_request.onreadystatechange = ajax_request_callback;
-            ajax_request.open("POST", "http://localhost/api/v1/search", true);
-            ajax_request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            ajax_request.send(encodeURI('key=' + key));
+        var key = $("#key-input-entry").val();
+        if (key == "") {
+            return false;
         }
+
+        ajax_request.onreadystatechange = function() {
+            state = ajax_request.readyState;
+            status = ajax_request.status;
+            if (4 == state && 200 == status) {
+                $("#table-body").replaceWith(ajax_request.responseText);
+                $("input[type='download']").on("click", do_download);
+            }
+        };
+
+        ajax_request.open("POST", "/api/v1/search", true);
+        ajax_request.setRequestHeader('Content-Type',
+                                      'application/x-www-form-urlencoded');
+        ajax_request.responseType = 'text';
+        ajax_request.send(encodeURI('key=' + key));
         return false
     }
 
     function do_download() {
         var id_obj = $(this).parent().parent().children()[0];
+        var name_obj = $(this).parent().parent().children()[1];
         var id = id_obj.innerHTML;
-        alert(id);
-    }
+        file_name = name_obj.innerHTML;
 
-    function ajax_request_callback() {
-        if (ajax_request.readyState == 4) {
-            if (ajax_request.status == 200) {
-                $("#table-body").replaceWith(ajax_request.responseText);
-                $("input[type='download']").on("click", do_download);
+        ajax_request.onreadystatechange = function() {
+            state = ajax_request.readyState;
+            status = ajax_request.status;
+            if (4 == state && 200 == status && '' != file_name) {
+                download(ajax_request.response, file_name, 'audio/mpeg');
             }
-        }
+        };
+
+        ajax_request.open("POST", "/api/v1/download", true);
+        ajax_request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        ajax_request.responseType = 'blob';
+        ajax_request.send(encodeURI('id=' + id));
+        return false
     }
 
     init();
