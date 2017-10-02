@@ -12,9 +12,9 @@ class MusicApi(object):
         # Dirty hack.
         major, minor, _, _, _ = sys.version_info
         if major == 3 and minor < 5:
-            self.quote = parse.quote
+            self.has_quote_plus = False
         else:
-            self.quote = parse.quote_plus
+            self.has_quote_plus = True
 
     def network_check(func):
         def wrapper(*args, **kw):
@@ -36,17 +36,23 @@ class MusicApi(object):
         data['limit'] = limit
         data['page'] = page
 
+        if self.has_quote_plus:
+            encode_data = parse.urlencode(data, quote_via = parse.quote_plus)
+        else:
+            encode_data = parse.urlencode(data)
 
-        encode_data = parse.urlencode(data, quote_via = self.quote)
         request_url = self.search_uri + encode_data
         json_data = self.open_url(request_url)
         if json_data:
             return json.loads(json_data.decode('utf-8'))
 
     def GetSongUri(self, id):
-        encode_data = parse.urlencode({'id':id}, quote_via = self.quote)
-        request_url = self.download_uri + encode_data
+        if self.has_quote_plus:
+            encode_data = parse.urlencode({'id':id}, quote_via = parse.quote_plus)
+        else:
+            encode_data = parse.urlencode({'id':id})
 
+        request_url = self.download_uri + encode_data
         json_data = self.open_url(request_url)
         if not json_data:
             return
