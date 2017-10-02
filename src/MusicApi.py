@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import os, hashlib, shutil, json, logging
+import os, hashlib, shutil, json, logging, sys
 from urllib import request, parse, error
 
 class MusicApi(object):
@@ -8,6 +8,13 @@ class MusicApi(object):
         self.api_type = api_type
         self.search_uri = r'https://music-api-pjheqeosjj.now.sh/api/search/song/{}?'.format(self.api_type)
         self.download_uri = r'https://music-api-pjheqeosjj.now.sh/api/get/song/{}?'.format(self.api_type)
+
+        # Dirty hack.
+        major, minor, _, _, _ = sys.version_info
+        if major == 3 and minor < 5:
+            self.quote = parse.quote
+        else:
+            self.quote = parse.quote_plus
 
     def network_check(func):
         def wrapper(*args, **kw):
@@ -28,14 +35,16 @@ class MusicApi(object):
         data['key'] = search_key
         data['limit'] = limit
         data['page'] = page
-        encode_data = parse.urlencode(data, quote_via = parse.quote_plus)
+
+
+        encode_data = parse.urlencode(data, quote_via = self.quote)
         request_url = self.search_uri + encode_data
         json_data = self.open_url(request_url)
         if json_data:
             return json.loads(json_data.decode('utf-8'))
 
     def GetSongUri(self, id):
-        encode_data = parse.urlencode({'id':id}, quote_via = parse.quote_plus)
+        encode_data = parse.urlencode({'id':id}, quote_via = self.quote)
         request_url = self.download_uri + encode_data
 
         json_data = self.open_url(request_url)
