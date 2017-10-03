@@ -78,9 +78,7 @@ def api_v1_search():
 
     html = '<tbody id=\"table-body\">'
     for x in result:
-        name = list(x.keys())[0]
-        _id = list(x[name].keys())[0];
-        html += html_template.render(_id = _id, name = name)
+        html += html_template.render(_id = x[0], name = x[1])
     html += '</tbody>'
 
     return Response(response = html, status = 200)
