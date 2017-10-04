@@ -31,10 +31,11 @@
 
 input[type="download"] {
     height: 20px;
-    padding: 0 0px;
+    padding: 0 0;
     width: 50px;
     font-size: 7px;
     text-transform: unset;
+    border-radius: 0;
 }
 
 th, td {
@@ -44,4 +45,9 @@ th, td {
 #key-input-entry {
     border-radius: 0;
     font-size: 12px;
+}
+
+.progressbar {
+    width: 50px;
+    margin: auto;
 }

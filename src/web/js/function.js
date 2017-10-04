@@ -1,7 +1,10 @@
 $(document).ready(function() {
 
+    var SITE = 'http://127.0.0.1';
     var file_name = '';
-    var ajax_request = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
+    var lock = false;
+    var progressbar = null;
 
     function init() {
         $("#do_submit").on("click", do_submit);
@@ -13,20 +16,20 @@ $(document).ready(function() {
             return false;
         }
 
-        ajax_request.onreadystatechange = function() {
-            state = ajax_request.readyState;
-            status = ajax_request.status;
+        xhr.onreadystatechange = function() {
+            state = xhr.readyState;
+            status = xhr.status;
             if (4 == state && 200 == status) {
-                $("#table-body").replaceWith(ajax_request.responseText);
+                $("#table-body").replaceWith(xhr.responseText);
                 $("input[type='download']").on("click", do_download);
             }
         };
 
-        ajax_request.open("POST", "/api/v1/search", true);
-        ajax_request.setRequestHeader('Content-Type',
+        xhr.open("POST", SITE + "/api/v1/search", true);
+        xhr.setRequestHeader('Content-Type',
                                       'application/x-www-form-urlencoded');
-        ajax_request.responseType = 'text';
-        ajax_request.send(encodeURI('key=' + key));
+        xhr.responseType = 'text';
+        xhr.send(encodeURI('key=' + key));
         return false
     }
 
@@ -36,18 +39,44 @@ $(document).ready(function() {
         var id = id_obj.innerHTML;
         file_name = name_obj.innerHTML;
 
-        ajax_request.onreadystatechange = function() {
-            state = ajax_request.readyState;
-            status = ajax_request.status;
+        if (lock) {
+            return false;
+        } else {
+            lock  = true;
+        }
+        _id = 'progress' + id;
+        $(this).replaceWith('<div class=\"progressbar\" id=\"' + _id + '\"></div>');
+        progressbar = new ProgressBar.Line('#' + _id, {
+            strokeWidth: 4,
+            easing: 'easeInOut',
+            duration: 1400,
+            color: '#33C3F0',
+            trailColor: '#eee',
+            trailWidth: 1,
+            svgStyle: {width: '100%', height: '100%'}
+        });
+
+        xhr.open("POST", SITE + "/api/v1/download", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.responseType = 'blob';
+        xhr.onprogress = function(evt) {
+            if (evt.lengthComputable) {
+                progressbar.animate(evt.loaded / evt.total);
+            }
+        };
+        xhr.onloadend = function(evt) {
+            progressbar.animate(1.0);
+            lock = false;
+        };
+        xhr.onreadystatechange = function() {
+            state = xhr.readyState;
+            status = xhr.status;
             if (4 == state && 200 == status && '' != file_name) {
-                download(ajax_request.response, file_name, 'audio/mpeg');
+                download(xhr.response, file_name, 'audio/mpeg');
             }
         };
 
-        ajax_request.open("POST", "/api/v1/download", true);
-        ajax_request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        ajax_request.responseType = 'blob';
-        ajax_request.send(encodeURI('id=' + id));
+        xhr.send(encodeURI('id=' + id));
         return false
     }
 

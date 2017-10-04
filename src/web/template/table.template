@@ -2,8 +2,8 @@
   <td>{ID}</td>
   <td>{NAME}</td>
   <td>QQ</td>
-  <td>MPEG3</td>
   <td>
+    <!-- <a href="http://127.0.0.1/api/v1/download/{ID}" download="{NAME}" target="_balnk">Download</a> -->
     <input class="button" type="download" value="Download">
   </td>
 </tr>

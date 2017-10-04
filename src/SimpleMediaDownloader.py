@@ -3,6 +3,7 @@
 import os, sys, logging
 import argparse, io
 
+from urllib import parse
 from flask import Flask
 from flask import request
 from flask import Response
@@ -38,7 +39,7 @@ class SimpleMediaDownloader(object):
             print("I find some music ^0^")
             i = 0
             for x in songs:
-                k = list(x.keys())[0]
+                k = x[1]
                 output = "{}、{}".format(i, k)
                 i += 1
                 print(output)
@@ -61,16 +62,18 @@ def api_v1_error():
     return Response(response = '<h4>Error</h4>', status = 200)
 
 @app.route('/api/v1/search', methods = ['POST'])
-def api_v1_search():
+def api_v1_post_search():
     print(request.form)
     kv_pair = request.form
+    html = '<tbody id=\"table-body\">'
+    html += '</tbody>'
     if not kv_pair.get('key'):
-        return api_v1_error()
+        return Response(response = html, status = 200)
 
 
     result = downloader.searcher.Search(kv_pair['key'])
     if not result:
-        return api_v1_error()
+        return Response(response = html, status = 200)
 
     path = os.path.abspath('web/template/table.template')
     html_template = Template()
@@ -84,7 +87,7 @@ def api_v1_search():
     return Response(response = html, status = 200)
 
 @app.route('/api/v1/download', methods = ['POST'])
-def api_v1_download():
+def api_v1_post_download():
     print(request.form)
     kv_pair = request.form
     if not kv_pair.get('id'):
@@ -99,7 +102,27 @@ def api_v1_download():
         return api_v1_error()
 
     byte_buffer = io.BytesIO(binary_data)
-    return send_file(byte_buffer, mimetype = 'audio/mpeg')
+    response = send_file(byte_buffer, mimetype = 'audio/mpeg')
+    response.headers['Content-Length'] = len(byte_buffer.getbuffer())
+    return response
+
+@app.route('/api/v1/download/<_id>', methods = ['GET'])
+def api_v1_get_download(_id):
+    if not _id:
+        return api_v1_error()
+
+    url_dict = downloader.searcher.api.GetSongUri(_id)
+    if not url_dict:
+        return api_v1_error()
+
+    binary_data = downloader.searcher.api.open_url(url_dict[_id])
+    if not binary_data:
+        return api_v1_error()
+
+    byte_buffer = io.BytesIO(binary_data)
+    response = send_file(byte_buffer, mimetype = 'audio/mpeg')
+    response.headers['Content-Length'] = len(byte_buffer.getbuffer())
+    return response
 
 
 if __name__ == '__main__':
