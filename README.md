@@ -19,7 +19,10 @@ Setup nginx environment.
 
 ```bash
 $ sudo cp -r /var/www/html /var/www/html.bak
+$ sudo mkdir -p /var/www/html
 $ sudo cp -r SimpleMediaDownloader/src/web/* /var/www/html
+$ sudo vim /var/www/html/js/function.js # Set SITE = ''
+$ sudo chown www /var/www/html -R
 ```
 
 ```nginx
