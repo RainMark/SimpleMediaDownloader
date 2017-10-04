@@ -34,16 +34,16 @@ $(document).ready(function() {
     }
 
     function do_download() {
-        var id_obj = $(this).parent().parent().children()[0];
-        var name_obj = $(this).parent().parent().children()[1];
-        var id = id_obj.innerHTML;
-        file_name = name_obj.innerHTML;
-
         if (lock) {
             return false;
         } else {
             lock  = true;
         }
+
+        var id_obj = $(this).parent().parent().children()[0];
+        var name_obj = $(this).parent().parent().children()[1];
+        var id = id_obj.innerHTML;
+        file_name = name_obj.innerHTML;
         _id = 'progress' + id;
         $(this).replaceWith('<div class=\"progressbar\" id=\"' + _id + '\"></div>');
         progressbar = new ProgressBar.Line('#' + _id, {
