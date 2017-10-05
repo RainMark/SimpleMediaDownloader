@@ -41,7 +41,7 @@ server {
 }
 ```
 
-### TODO
+### Test
 
-+ Make search process fast.
-
++ Mozilla Firefox 55.0.3 (Linux)
++ Chromium 61.0.3163.100 (Linux)
