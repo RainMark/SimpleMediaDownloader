@@ -16,10 +16,10 @@ class Template(object):
         for line in f.readlines():
             self.context += line.strip()
 
-    def render(self, _id, name):
-        return self.context.format(ID = _id, NAME =  name)
+    def render(self, _id, name, url):
+        return self.context.format(ID = _id, NAME =  name, URL = url)
 
 if __name__ == '__main__':
     t = Template()
     t.load_from_file('web/template/table.template')
-    print(t.render(_id = 'HFBFT33', _name = '她说'))
+    print(t.render(_id = 'HFBFT33', name = '她说', url = 'ddd'))

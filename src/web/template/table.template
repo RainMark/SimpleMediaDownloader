@@ -3,7 +3,7 @@
   <td>{NAME}</td>
   <td>QQ</td>
   <td>
-    <!-- <a href="http://127.0.0.1/api/v1/download/{ID}" download="{NAME}" target="_balnk">Download</a> -->
-    <input class="button" type="download" value="Download">
+    <a href="{URL}" download="{NAME}" >Download</a>
+    <!-- <input class="button" type="download" value="Download"> -->
   </td>
 </tr>

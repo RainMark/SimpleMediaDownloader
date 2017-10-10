@@ -1,61 +1,19 @@
 #!/usr/bin/python3
 
 import os, sys, logging
-import argparse, io
+import argparse, io, urllib
 
-from urllib import parse
 from flask import Flask
 from flask import request
 from flask import Response
 from flask import send_file
 from flask_cors import CORS
 
-from Searcher import Searcher
-from Downloader import Downloader
+from MusicApi import MusicApi
 from Template import Template
 
-class SimpleMediaDownloader(object):
-    def __init__(self, download_dir = '~/sqdownload'):
-        self.downloader = Downloader(download_dir)
-        self.searcher = Searcher()
-
-    def Download(self, download_numbers, songs):
-        url_list = list()
-        for i in download_numbers:
-            url_list.append(songs[int(i)])
-        self.downloader.Download(url_list)
-
-    def terminal_run(self):
-        quit_loop = False
-        while not quit_loop:
-            print("What do you want to listen?<\'quit\' to quit shell>")
-            key = sys.stdin.readline().strip()
-            if key == 'quit':
-                quit_loop = True
-                break
-
-            print("Searching...")
-            songs = self.searcher.Search(key)
-            print("I find some music ^0^")
-            i = 0
-            for x in songs:
-                k = x[1]
-                output = "{}、{}".format(i, k)
-                i += 1
-                print(output)
-            print("Choose number to download<split by space/default all>")
-            numbers = sys.stdin.readline().strip()
-            download_list = numbers.split(' ')
-            if len(download_list) == 0 or '' == download_list[0]:
-                download_list = range(0, len(songs))
-            self.Download(download_list, songs)
-
-
-
-
-
-global downloader
 app = Flask(__name__)
+Api = MusicApi()
 CORS(app)
 
 def api_v1_error():
@@ -71,7 +29,7 @@ def api_v1_post_search():
         return Response(response = html, status = 200)
 
 
-    result = downloader.searcher.Search(kv_pair['key'])
+    result = Api.Search(kv_pair['key'])
     if not result:
         return Response(response = html, status = 200)
 
@@ -81,7 +39,9 @@ def api_v1_post_search():
 
     html = '<tbody id=\"table-body\">'
     for x in result:
-        html += html_template.render(_id = x[0], name = x[1])
+        display = x['songname'] + ' - ' + Api.Singer(x)
+        url = Api.GetMediaUrl(x['songid'])
+        html += html_template.render(_id = x['songid'], name = display, url = url)
     html += '</tbody>'
 
     return Response(response = html, status = 200)
@@ -93,11 +53,13 @@ def api_v1_post_download():
     if not kv_pair.get('id'):
         return api_v1_error()
 
-    url = downloader.searcher.api.GetSongUri(kv_pair['id'])
+    url = Api.GetMediaUrl(kv_pair['id'])
+    print(url)
     if not url:
         return api_v1_error()
 
-    binary_data = downloader.searcher.api.open_url(url[kv_pair['id']])
+    binary_data = urllib.request.urlopen(url).read()
+    print('Get')
     if not binary_data:
         return api_v1_error()
 
@@ -111,11 +73,11 @@ def api_v1_get_download(_id):
     if not _id:
         return api_v1_error()
 
-    url_dict = downloader.searcher.api.GetSongUri(_id)
-    if not url_dict:
+    url = Api.GetMediaUrl(kv_pair['id'])
+    if not url:
         return api_v1_error()
 
-    binary_data = downloader.searcher.api.open_url(url_dict[_id])
+    binary_data = urllib.request.urlopen(url).read()
     if not binary_data:
         return api_v1_error()
 
@@ -124,34 +86,19 @@ def api_v1_get_download(_id):
     response.headers['Content-Length'] = len(byte_buffer.getbuffer())
     return response
 
-
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--directory", help="Set download path")
-    parser.add_argument("-s", "--server", help="Start as a web server")
     parser.add_argument("-p", "--port", help="Web server port", type=int)
-
     args = parser.parse_args()
-    if args.directory and os.path.isdir(args.directory):
-        downloader = SimpleMediaDownloader(args.directory)
+    if args.port:
+        try:
+            app.run(port = args.port)
+        except PermissionError as e:
+            logging.error('Permission denied')
     else:
-        downloader = SimpleMediaDownloader()
-        logging.info('Use default directory')
-
-    if args.server and args.server == 'yes':
-        if args.port:
-            try:
-                app.run(port = args.port)
-            except PermissionError as e:
-                logging.error('Permission denied')
-        else:
-            logging.info('Use default port')
-            app.run()
-    else:
-        downloader.terminal_run()
-
+        logging.info('Use default port')
+        app.run()
 
 
 

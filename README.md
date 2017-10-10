@@ -10,7 +10,7 @@ Setup python environment.
 $ git clone https://git.0491401.org/i233/SimpleMediaDownloader.git
 $ cd SimpleMediaDownloader/src
 $ sudo -H pip3 install -r requirements.txt
-$ python3 SimpleMediaDownloader.py -s yes -p 8000
+$ python3 SimpleMediaDownloader.py -p 8000
 ```
 
 #### Stage2
