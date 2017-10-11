@@ -38,13 +38,15 @@ def api_v1_post_search():
     html_template.load_from_file(path)
 
     html = '<tbody id=\"table-body\">'
+    __id = 1
     for x in result:
         display = x['songname'] + ' - ' + Api.Singer(x)
         qqurl = Api.GetMediaUrl(x['songid'])
         if not qqurl:
             url = ''
         url = '/qq' + qqurl.split('dl.stream.qqmusic.qq.com')[1]
-        html += html_template.render(_id = x['songid'], name = display, url = url)
+        html += html_template.render(_id = __id, name = display, url = url)
+        __id += 1
     html += '</tbody>'
 
     return Response(response = html, status = 200)
