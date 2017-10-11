@@ -27,17 +27,23 @@ $ sudo chown www /var/www/html -R
 
 ```nginx
 server {
-	listen 80;
-	server_name example.com;
-	client_max_body_size 256M;
+    listen 80;
+    server_name example.org;
+    client_max_body_size 256M;
+    resolver 8.8.8.8;
 
-	location /api {
-		proxy_pass http://localhost:8000;
-	}
+    location /qq {
+        proxy_pass https://dl.stream.qqmusic.qq.com/$1$is_args$args;
+        rewrite ^/qq/(.*) /$1 break;
+    }
 
-	location / {
-		root /var/www/html;
-	}
+    location /api/v1 {
+        proxy_pass http://localhost:8000;
+    }
+
+    location / {
+        root /var/www/html;
+    }
 }
 ```
 
