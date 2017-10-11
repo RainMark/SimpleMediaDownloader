@@ -40,7 +40,10 @@ def api_v1_post_search():
     html = '<tbody id=\"table-body\">'
     for x in result:
         display = x['songname'] + ' - ' + Api.Singer(x)
-        url = Api.GetMediaUrl(x['songid'])
+        qqurl = Api.GetMediaUrl(x['songid'])
+        if not qqurl:
+            url = ''
+        url = '/qq' + qqurl.split('dl.stream.qqmusic.qq.com')[1]
         html += html_template.render(_id = x['songid'], name = display, url = url)
     html += '</tbody>'
 
@@ -68,23 +71,14 @@ def api_v1_post_download():
     response.headers['Content-Length'] = len(byte_buffer.getbuffer())
     return response
 
-@app.route('/api/v1/download/<_id>', methods = ['GET'])
-def api_v1_get_download(_id):
+@app.route('/api/v1/original/<_id>', methods = ['GET'])
+def api_v1_get_original(_id):
     if not _id:
-        return api_v1_error()
-
-    url = Api.GetMediaUrl(kv_pair['id'])
-    if not url:
-        return api_v1_error()
-
-    binary_data = urllib.request.urlopen(url).read()
-    if not binary_data:
-        return api_v1_error()
-
-    byte_buffer = io.BytesIO(binary_data)
-    response = send_file(byte_buffer, mimetype = 'audio/mpeg')
-    response.headers['Content-Length'] = len(byte_buffer.getbuffer())
-    return response
+        html = ''
+    html = Api.GetMediaUrl(_id)
+    if not html:
+        html = ''
+    return Response(response = html, status = 200)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
