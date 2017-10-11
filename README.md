@@ -33,8 +33,8 @@ server {
     resolver 8.8.8.8;
 
     location /qq {
-        proxy_pass https://dl.stream.qqmusic.qq.com/$1$is_args$args;
         rewrite ^/qq/(.*) /$1 break;
+        proxy_pass https://dl.stream.qqmusic.qq.com/$1$is_args$args;
     }
 
     location /api/v1 {
