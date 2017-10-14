@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    var SITE = 'http://127.0.0.1';
+    var SITE = '';
     var file_name = '';
     var xhr = new XMLHttpRequest();
     var lock = false;
