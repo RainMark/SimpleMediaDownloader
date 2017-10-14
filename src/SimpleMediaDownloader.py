@@ -87,15 +87,19 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--port", help="Web server port", type=int)
     args = parser.parse_args()
+    debug = False
+
+    if 'DEBUG' in os.environ and os.environ['DEBUG'] == "1":
+        debug = True
+
     if args.port:
         try:
-            app.run(port = args.port)
+            app.run(debug=debug, host='0.0.0.0', port = args.port)
         except PermissionError as e:
             logging.error('Permission denied')
     else:
         logging.info('Use default port')
-        app.run()
-
+        app.run(debug=debug, host='0.0.0.0')
 
 
 
