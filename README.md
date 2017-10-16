@@ -18,7 +18,8 @@ $ python3 SimpleMediaDownloader.py -p 8000
 Setup nginx environment.
 
 ```bash
-$ sudo cp -r SimpleMediaDownloader/src/site /var/www/site
+$ sudo mkdir -p /var/www/site
+$ sudo cp -r ../site/* /var/www/site/
 ```
 
 ```nginx
