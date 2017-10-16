@@ -18,10 +18,8 @@ $ python3 SimpleMediaDownloader.py -p 8000
 Setup nginx environment.
 
 ```bash
-$ sudo cp -r /var/www/html /var/www/html.bak
-$ sudo mkdir -p /var/www/html
-$ sudo cp -r SimpleMediaDownloader/src/site/* /var/www/html
-$ sudo chown www /var/www/html -R
+$ sudo cp -r SimpleMediaDownloader/src/site /var/www/
+$ sudo chmod 644 -R /var/www/site
 ```
 
 ```nginx
@@ -31,17 +29,17 @@ server {
     client_max_body_size 256M;
     resolver 8.8.8.8;
 
-    location /qq {
-        rewrite ^/qq/(.*) /$1 break;
+    location /qqmusic {
+        rewrite ^/qqmusic/(.*) /$1 break;
         proxy_pass https://dl.stream.qqmusic.qq.com/$1$is_args$args;
     }
 
     location /api/v1 {
-        proxy_pass http://localhost:8000;
+        proxy_pass http://127.0.0.1:8000;
     }
 
     location / {
-        root /var/www/html;
+        root /var/www/site;
     }
 }
 ```

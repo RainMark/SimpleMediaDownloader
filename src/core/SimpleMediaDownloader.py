@@ -21,7 +21,7 @@ def api_v1_error():
 
 @app.route('/api/v1/search', methods = ['POST'])
 def api_v1_post_search():
-    print(request.form)
+    logging.info(request.form)
     kv_pair = request.form
     html = '<tbody id=\"table-body\">'
     html += '</tbody>'
@@ -33,7 +33,7 @@ def api_v1_post_search():
     if not result:
         return Response(response = html, status = 200)
 
-    path = os.path.abspath('web/template/table.template')
+    path = os.path.abspath('../site/template/table.template')
     html_template = Template()
     html_template.load_from_file(path)
 
@@ -41,49 +41,50 @@ def api_v1_post_search():
     __id = 1
     for x in result:
         display = x['songname'] + ' - ' + Api.Singer(x)
-        qqurl = Api.GetMediaUrl(x['songid'])
-        if not qqurl:
+        qqmusicurl = Api.GetMediaUrl(x['songid'])
+        if not qqmusicurl:
             url = ''
-        url = '/qq' + qqurl.split('dl.stream.qqmusic.qq.com')[1]
+        else:
+            url = '/qqmusic' + qqmusicurl.split('dl.stream.qqmusic.qq.com')[1]
         html += html_template.render(_id = __id, name = display, url = url)
         __id += 1
     html += '</tbody>'
 
     return Response(response = html, status = 200)
 
-@app.route('/api/v1/download', methods = ['POST'])
-def api_v1_post_download():
-    print(request.form)
-    kv_pair = request.form
-    if not kv_pair.get('id'):
-        return api_v1_error()
+# @app.route('/api/v1/download', methods = ['POST'])
+# def api_v1_post_download():
+#     logging.info(request.form)
+#     kv_pair = request.form
+#     if not kv_pair.get('id'):
+#         return api_v1_error()
 
-    url = Api.GetMediaUrl(kv_pair['id'])
-    print(url)
-    if not url:
-        return api_v1_error()
+#     url = Api.GetMediaUrl(kv_pair['id'])
+#     logging.info(url)
+#     if not url:
+#         return api_v1_error()
 
-    binary_data = urllib.request.urlopen(url).read()
-    print('Get')
-    if not binary_data:
-        return api_v1_error()
+#     binary_data = urllib.request.urlopen(url).read()
+#     logging.debug('Get')
+#     if not binary_data:
+#         return api_v1_error()
 
-    byte_buffer = io.BytesIO(binary_data)
-    response = send_file(byte_buffer, mimetype = 'audio/mpeg')
-    response.headers['Content-Length'] = len(byte_buffer.getbuffer())
-    return response
+#     byte_buffer = io.BytesIO(binary_data)
+#     response = send_file(byte_buffer, mimetype = 'audio/mpeg')
+#     response.headers['Content-Length'] = len(byte_buffer.getbuffer())
+#     return response
 
-@app.route('/api/v1/original/<_id>', methods = ['GET'])
-def api_v1_get_original(_id):
-    if not _id:
-        html = ''
-    html = Api.GetMediaUrl(_id)
-    if not html:
-        html = ''
-    return Response(response = html, status = 200)
+# @app.route('/api/v1/original/<_id>', methods = ['GET'])
+# def api_v1_get_original(_id):
+#     if not _id:
+#         html = ''
+#     html = Api.GetMediaUrl(_id)
+#     if not html:
+#         html = ''
+#     return Response(response = html, status = 200)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.WARNING)
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--port", help="Web server port", type=int)
     args = parser.parse_args()
