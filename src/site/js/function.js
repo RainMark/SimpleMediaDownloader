@@ -17,7 +17,6 @@ $(document).ready(function() {
             status = xhr.status;
             if (4 == state && 200 == status) {
                 $("#table-body").replaceWith(xhr.responseText);
-                $("input[type='download']").on("click", do_download);
             }
         };
 
