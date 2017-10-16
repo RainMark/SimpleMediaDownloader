@@ -8,7 +8,7 @@ Setup python environment.
 
 ```bash
 $ git clone https://git.0491401.org/i233/SimpleMediaDownloader.git
-$ cd SimpleMediaDownloader/src
+$ cd SimpleMediaDownloader/src/core
 $ sudo -H pip3 install -r requirements.txt
 $ python3 SimpleMediaDownloader.py -p 8000
 ```
@@ -20,8 +20,7 @@ Setup nginx environment.
 ```bash
 $ sudo cp -r /var/www/html /var/www/html.bak
 $ sudo mkdir -p /var/www/html
-$ sudo cp -r SimpleMediaDownloader/src/web/* /var/www/html
-$ sudo vim /var/www/html/js/function.js # Set SITE = ''
+$ sudo cp -r SimpleMediaDownloader/src/site/* /var/www/html
 $ sudo chown www /var/www/html -R
 ```
 
