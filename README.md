@@ -1,7 +1,11 @@
 # Simple Media Downloader
 
 ### Install
+
 Please install nginx firstly.
+
++ please change server_name in *.nginx.conf
++ if you use https please check [https://github.com/XieXianbin/baidu-share-https](https://github.com/XieXianbin/baidu-share-https)
 
 ```bash
 $ git clone https://git.0491401.org/i233/SimpleMediaDownloader.git
@@ -12,9 +16,7 @@ $
 $ sudo mkdir -p /var/www/site
 $ sudo cp -r ../site/* /var/www/site/
 $ sudo cp conf/baidushare.nginx.conf  conf/SimpleMediaDownloader.nginx.conf /etc/nginx/sites-available/
-$ sudo ls -s /etc/nginx/sites-available/baidushare.nginx.conf /etc/nginx/sites-enabled/baidushare.nginx.conf
 $ sudo ls -s /etc/nginx/sites-available/SimpleMediaDownloader.nginx.conf /etc/nginx/sites-enabled/SimpleMediaDownloader.nginx.conf
-$ # NOTE: please change server_name in *.nginx.conf
 $ sudo nginx -s reload
 ```
 
