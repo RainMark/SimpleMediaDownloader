@@ -1,50 +1,24 @@
 # Simple Media Downloader
 
-### Deploy
-
-#### Stage1
-
-Setup python environment.
+### Install
+Please install nginx firstly.
 
 ```bash
 $ git clone https://git.0491401.org/i233/SimpleMediaDownloader.git
-$ cd SimpleMediaDownloader/src/core
+$ cd SimpleMediaDownloader
 $ sudo -H pip3 install -r requirements.txt
-$ python3 SimpleMediaDownloader.py -p 8000
-```
-
-#### Stage2
-
-Setup nginx environment.
-
-```bash
+$ cd src/core && python3 SimpleMediaDownloader.py -p 8000 &
+$
 $ sudo mkdir -p /var/www/site
 $ sudo cp -r ../site/* /var/www/site/
+$ sudo cp conf/baidushare.nginx.conf  conf/SimpleMediaDownloader.nginx.conf /etc/nginx/sites-available/
+$ sudo ls -s /etc/nginx/sites-available/baidushare.nginx.conf /etc/nginx/sites-enabled/baidushare.nginx.conf
+$ sudo ls -s /etc/nginx/sites-available/SimpleMediaDownloader.nginx.conf /etc/nginx/sites-enabled/SimpleMediaDownloader.nginx.conf
+$ # NOTE: please change server_name in *.nginx.conf
+$ sudo nginx -s reload
 ```
 
-```nginx
-server {
-    listen 80;
-    server_name example.org;
-    client_max_body_size 256M;
-    resolver 8.8.8.8;
-
-    location /qqmusic {
-        rewrite ^/qqmusic/(.*) /$1 break;
-        proxy_pass https://dl.stream.qqmusic.qq.com/$1$is_args$args;
-    }
-
-    location /api/v1 {
-        proxy_pass http://127.0.0.1:8000;
-    }
-
-    location / {
-        root /var/www/site;
-    }
-}
-```
-
-### Test
+### Tested
 
 + Mozilla Firefox 55.0.3 (Linux)
 + Chromium 61.0.3163.100 (Linux)
