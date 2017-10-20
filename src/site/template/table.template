@@ -1,9 +1,0 @@
-<tr>
-  <td>{ID}</td>
-  <td>{NAME}</td>
-  <td>QQ</td>
-  <td>
-    <a href="{URL}" download="{NAME}" >Download</a>
-    <!-- <input class="button" type="download" value="Download"> -->
-  </td>
-</tr>

@@ -15,8 +15,9 @@ $ cd src/core && python3 SimpleMediaDownloader.py -p 8000 &
 $
 $ sudo mkdir -p /var/www/site
 $ sudo cp -r ../site/* /var/www/site/
-$ sudo cp conf/baidushare.nginx.conf  conf/SimpleMediaDownloader.nginx.conf /etc/nginx/sites-available/
-$ sudo ls -s /etc/nginx/sites-available/SimpleMediaDownloader.nginx.conf /etc/nginx/sites-enabled/SimpleMediaDownloader.nginx.conf
+$ cd ../../conf
+$ sudo cp SimpleMediaDownloader.nginx.conf /etc/nginx/sites-available/
+$ sudo ln -s /etc/nginx/sites-available/SimpleMediaDownloader.nginx.conf /etc/nginx/sites-enabled/SimpleMediaDownloader.nginx.conf
 $ sudo nginx -s reload
 ```
 

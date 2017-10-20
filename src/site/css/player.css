@@ -1,0 +1,120 @@
+@import 'https://fonts.cat.net/css?family=Reem+Kufi';
+
+body {
+    background: #8e9eab;
+    background: linear-gradient(to left, #8e9eab , #eef2f3);
+}
+
+
+@keyframes wave {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.music-card {
+    margin: 100px auto;
+    background: #fff;
+    box-shadow: 9px 7px 37px -6px rgba(0,0,0,0.75);
+    overflow: hidden;
+    position: relative;
+    width: 300px;
+    height: 500px;
+}
+
+.image {
+    /* background: url('https://goo.gl/Ztc4c1') no-repeat 75%; */
+    background-size: cover;  
+    position: absolute;
+    z-index: 1;
+    opacity: 0.3;
+    height: 300px;
+    width: 300px;
+}
+
+.image:after {
+    height: 100px;
+    content: '';
+    top: 200px;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    background: linear-gradient(rgba(9, 2, 4, 0), #444);
+}
+
+.wave {
+    position: absolute;
+    height: 750px;
+    width: 750px;
+    opacity: 0.6;
+    left: 0;
+    top: 0;
+    margin-left: -70%;
+    margin-top: -130%;
+    background: radial-gradient(#353535, #383737);
+}
+
+.wave:nth-child(2),
+.wave:nth-child(3) {
+    top: 10px;
+}
+
+.playing .wave {
+    border-radius: 40%;
+    animation: wave 3000ms infinite linear;
+}
+/* when stop */
+.wave {
+    border-radius: 40%;
+    animation: wave 55s infinite linear;
+}
+
+.playing .wave:nth-child(2) {
+    animation-duration: 4000ms;
+}
+/* when stop */
+.wave:nth-child(2) {
+    animation-duration: 50s;
+}
+
+.playing .wave:nth-child(3) {
+    animation-duration: 5000ms;
+}
+/* when stop */
+.wave:nth-child(3) {
+    animation-duration: 45s;
+}
+
+.info {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.title {
+    font-size: 1.4em;
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-family: 'Reem Kufi', sans-serif;
+}
+
+.artist {
+    color: #cfcfcf;
+    font-size: 1.2em;
+    letter-spacing: 0.08em;
+    font-family: 'Reem Kufi', sans-serif;
+}
+.fa {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #555;
+}
+.fa-play {
+    display: none;
+}

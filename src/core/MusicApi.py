@@ -31,6 +31,9 @@ class MusicApi(object):
             display += x
         return display
 
+    def Image(self, _id):
+        return 'http://singerimg.kugou.com/uploadpic/softhead/400/20161216/20161216161029213718.jpg'
+
 if __name__ == '__main__':
     Api = MusicApi()
     # songlist = Api.Search('胡桃夹子', 1, 10)

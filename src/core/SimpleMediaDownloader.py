@@ -11,9 +11,12 @@ from flask_cors import CORS
 
 from MusicApi import MusicApi
 from Template import Template
+from SQLiteDB import SQLiteDB
 
 app = Flask(__name__)
 Api = MusicApi()
+DB  = SQLiteDB()
+DB.init_schema()
 CORS(app)
 
 def api_v1_error():
@@ -34,28 +37,45 @@ def api_v1_post_search():
     if not result:
         return Response(response = html, status = 200)
 
-    path = os.path.abspath('../site/template/table.template')
+    path = os.path.abspath('../site/template/search.html')
     html_template = Template()
     html_template.load_from_file(path)
 
     html = '<tbody id=\"table-body\">'
-    __id = 1
+    order = 1
     for x in result:
-        display = x['songname'] + ' - ' + Api.Singer(x)
+        display_name = x['songname'] + ' - ' + Api.Singer(x)
         qqmusicurl = Api.GetMediaUrl(x['songid'])
         if not qqmusicurl:
-            url = ''
-        else:
-            url = '/qqmusic' + qqmusicurl.split('dl.stream.qqmusic.qq.com')[1]
-        html += html_template.render(_id = __id, name = display, url = url)
-        __id += 1
+            continue
+
+        url = '/qqmusic' + qqmusicurl.split('dl.stream.qqmusic.qq.com')[1]
+        html += html_template.render_search_html(order = order, song_name = display_name, download_url = url,
+                                                    play_url = '/play/{}'.format(x['songid']))
+        DB.put_song(songid = x['songid'], songname = display_name,
+                    songurl = url, singername = Api.Singer(x), songimageurl = Api.Image(x))
+        order += 1
     html += '</tbody>'
 
     return Response(response = html, status = 200)
 
+@app.route('/api/v1/play/<_id>', methods = ['GET'])
+def api_v1_get_play(_id):
+    logging.info(_id)
+    if not _id:
+        return api_v1_error()
+    template = Template()
+    template.load_from_file('../site/template/player.html')
+    info = DB.get_song(_id)
+    if not info:
+        return api_v1_error()
+    html = template.render_player_html(song_name = info[1], download_url = info[2],
+                                song_image = info[3], singer_name = info[4])
+    return Response(response = html, status = 200)
+
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(level=logging.DEBUG)
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--port", help="Web server port", type=int)
     args = parser.parse_args()
