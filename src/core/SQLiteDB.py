@@ -30,12 +30,9 @@ class SQLiteDB(object):
         sql = 'SELECT songid, songname, songurl, songimageurl, singername FROM song WHERE songid = ?'
         try:
             self.cursor.execute(sql, (_id, ))
-            self.connect.commit()
         except sqlite3.Error as e:
             logging.error(e)
-        line = self.cursor.fetchone()
-        logging.debug(line)
-        return line
+        return self.cursor.fetchone()
 
     def put_song(self, songid, songname, songurl, singername, songimageurl):
         data = (songid, songname, songurl, singername, songimageurl)
@@ -44,7 +41,10 @@ class SQLiteDB(object):
             self.cursor.execute(sql, data)
             self.connect.commit()
         except sqlite3.Error as e:
-            logging.warning(e)
+            logging.info(e)
+
+    def close(self):
+        self.connect.close()
 
 if __name__ == '__main__':
     logging.basicConfig(level = logging.INFO)

@@ -3,7 +3,7 @@
   <head>
 
     <meta charset="utf-8">
-    <title>{SONG_NAME}</title>
+    <title>{{ SONG_NAME }}</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -23,7 +23,7 @@
     <div class="music-card playing">
       
       <div class="image">
-        <!-- <img src="{SONG_IMAGE}" width="300" height="300"> -->
+        <img src="{{ SONG_IMAGE }}" width="300" height="300">
       </div>
       
       <div class="wave"></div>
@@ -31,15 +31,16 @@
       <div class="wave"></div>
       
       <div class="info">
-        <h2 class="title">{SONG_NAME}</h2>
-        <div class="artist">{SINGER}</div>
+        <h2 class="title">{{ SONG_NAME }}</h2>
+        <div class="artist">{{ SINGER }}</div>
       </div>
       
       <i class="fa fa-pause trigger" aria-hidden="true" style="display: block;"></i>
       <i class="fa fa-play trigger" aria-hidden="true" style="display: none;"></i>
     </div>
 
-    <a id="song" style="display: none;" href="{DOWNLOAD_URL}">
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"100"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
+    <a id="song" style="display: none;" href="{{ SONG_URL }}"></a>
   </body>
 </html>

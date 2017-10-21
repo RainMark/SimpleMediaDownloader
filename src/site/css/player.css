@@ -1,4 +1,4 @@
-@import 'https://fonts.cat.net/css?family=Reem+Kufi';
+@import 'https://fonts.cat.net/css?family=Raleway:400,300,600';
 
 body {
     background: #8e9eab;
@@ -12,7 +12,7 @@ body {
 }
 
 .music-card {
-    margin: 100px auto;
+    margin: 30px auto;
     background: #fff;
     box-shadow: 9px 7px 37px -6px rgba(0,0,0,0.75);
     overflow: hidden;
@@ -22,7 +22,6 @@ body {
 }
 
 .image {
-    /* background: url('https://goo.gl/Ztc4c1') no-repeat 75%; */
     background-size: cover;  
     position: absolute;
     z-index: 1;
@@ -97,15 +96,14 @@ body {
     font-weight: 400;
     color: #333;
     margin-bottom: 8px;
-    text-transform: uppercase;
-    font-family: 'Reem Kufi', sans-serif;
+    font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .artist {
     color: #cfcfcf;
     font-size: 1.2em;
     letter-spacing: 0.08em;
-    font-family: 'Reem Kufi', sans-serif;
+    font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .fa {
     position: absolute;

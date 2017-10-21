@@ -34,6 +34,9 @@ class MusicApi(object):
     def Image(self, _id):
         return 'http://singerimg.kugou.com/uploadpic/softhead/400/20161216/20161216161029213718.jpg'
 
+    def RewriteUrl(self, url):
+            return '/qqmusic/' + url.split('dl.stream.qqmusic.qq.com')[1]
+
 if __name__ == '__main__':
     Api = MusicApi()
     # songlist = Api.Search('胡桃夹子', 1, 10)

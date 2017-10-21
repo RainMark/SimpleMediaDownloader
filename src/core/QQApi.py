@@ -8,6 +8,7 @@ class QQApi(object):
         self.search_url = 'https://c.y.qq.com/soso/fcgi-bin/search_cp?'
         self.musicexpress_url = 'https://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?'
         self.download_url = 'http://dl.stream.qqmusic.qq.com/'
+        self.album_url = 'https://y.gtimg.cn/music/photo_new/T002R300x300M000'
         self.network = Network()
         self.size_map = {
             'size128':'M500',
@@ -40,6 +41,7 @@ class QQApi(object):
             simple_song_dict = {}
             simple_song_dict['songname'] = x['songname']
             simple_song_dict['songid'] = x['songmid']
+            simple_song_dict['albumurl'] = self.album_url + x['albummid'] + '.jpg'
             simple_singer_list = []
             for k in x['singer']:
                 simple_singer_list.append(k['name'])

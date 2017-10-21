@@ -1,14 +1,14 @@
 <tr>
-  <td>{ORDER}</td>
-  <td>{SONG_NAME}</td>
-  <td>{SOURCE}</td>
+  <td>{{ ORDER }}</td>
+  <td>{{ SONG_NAME }}</td>
+  <td>{{ SOURCE }}</td>
   <td>
-    <a href="{PLAY_URL}" target="view_window">
+    <a href="{{ PLAY_URL }}" target="view_window">
       <img border="0" src="images/play.svg" width="20" height="20">
     </a>
   </td>
   <td>
-    <a href="{DOWNLOAD_URL}" download="{SONG_NAME}.mp3">
+    <a href="{{ SONG_URL }}" download="{{ SONG_NAME }}.mp3">
       <img border="0" src="images/download.svg" width="20" height="20">
     </a>
   </td>
