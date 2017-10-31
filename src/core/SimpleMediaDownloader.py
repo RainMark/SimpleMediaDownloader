@@ -47,7 +47,7 @@ def api_v1_post_search():
 
         info = {'SONG_NAME' : x['songname'] + ' - ' + Api.Singer(x),
                 'SONG_URL'  : Api.RewriteUrl(qqmusicurl),
-                'PLAY_URL'  : '/api/v1/play?songid=' + x['songid'],
+                'PLAY_URL'  : '/play?songid=' + x['songid'],
                 'ORDER'     : order,
                 'SOURCE'    : 'QQ'}
         DB.put_song(songid = x['songid'], songname = x['songname'],
