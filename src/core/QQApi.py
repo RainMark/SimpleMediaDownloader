@@ -14,7 +14,7 @@ class QQApi(object):
             'size128':'M500',
             'size320':'M800'}
 
-    def Search(self, keyword, page, limit = 10):
+    def Search(self, keyword, page, limit = 8):
         param = {
             'p':page,
             'n':limit,

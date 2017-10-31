@@ -41,31 +41,27 @@ def api_v1_post_search():
     html = '<tbody id=\"table-body\">'
     order = 1
     for x in result:
+        qqmusicurl = Api.GetMediaUrl(x['songid'])
+        if not qqmusicurl:
+            continue
+
         info = {'SONG_NAME' : x['songname'] + ' - ' + Api.Singer(x),
-                'ORDER'    : order,
-                'SOURCE'   : 'QQ',
-                'PLAY_URL'  : '/play/' + x['songid']}
-        song = DB.get_song(x['songid'])
-        if not song:
-            qqmusicurl = Api.GetMediaUrl(x['songid'])
-            if not qqmusicurl:
-                continue
-
-            info['SONG_URL'] = Api.RewriteUrl(qqmusicurl)
-            DB.put_song(songid = x['songid'], songname = x['songname'],
-                        songurl = info['SONG_URL'], singername = Api.Singer(x),
-                        songimageurl = x['albumurl'])
-        else:
-            info['SONG_URL'] = song[2]
-
+                'SONG_URL'  : Api.RewriteUrl(qqmusicurl),
+                'PLAY_URL'  : '/api/v1/play?songid=' + x['songid'],
+                'ORDER'     : order,
+                'SOURCE'    : 'QQ'}
+        DB.put_song(songid = x['songid'], songname = x['songname'],
+                    songurl = info['SONG_URL'], singername = Api.Singer(x),
+                    songimageurl = x['albumurl'])
         html += st.render(info)
         order += 1
-
     html += '</tbody>'
     return Response(response = html, status = 200)
 
-@app.route('/api/v1/play/<_id>', methods = ['GET'])
-def api_v1_get_play(_id):
+@app.route('/api/v1/play', methods = ['GET'])
+def api_v1_get_play():
+    logging.debug(request.args)
+    _id = request.args.get('songid')
     if not _id:
         return api_v1_error()
     song = DB.get_song(_id)
@@ -81,11 +77,17 @@ def api_v1_get_play(_id):
     return Response(response = st.render(var), status = 200)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--port", help="Web server port", type=int)
+    parser.add_argument("-d", "--debug", help="debug mode: yes/no")
     args = parser.parse_args()
 
+    if args.debug and args.debug == 'yes':
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.INFO
+
+    logging.basicConfig(level=log_level)
     DB.init_schema()
     if args.port:
         try:
