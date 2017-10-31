@@ -20,7 +20,7 @@ $(document).ready(function() {
             }
         };
 
-        xhr.open("POST", "/api/v1/search", true);
+        xhr.open("POST", "/search", true);
         xhr.setRequestHeader('Content-Type',
                                       'application/x-www-form-urlencoded');
         xhr.send(encodeURI('key=' + key));

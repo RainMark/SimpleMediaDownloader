@@ -23,7 +23,7 @@ def api_v1_error():
     error_message = 'Unexpected error'
     return Response(response = error_message, status = 404)
 
-@app.route('/api/v1/search', methods = ['POST'])
+@app.route('/search', methods = ['POST'])
 def api_v1_post_search():
     logging.info(request.form)
     kv_pair = request.form
@@ -47,7 +47,7 @@ def api_v1_post_search():
 
         info = {'SONG_NAME' : x['songname'] + ' - ' + Api.Singer(x),
                 'SONG_URL'  : Api.RewriteUrl(qqmusicurl),
-                'PLAY_URL'  : '/api/v1/play?songid=' + x['songid'],
+                'PLAY_URL'  : '/play?songid=' + x['songid'],
                 'ORDER'     : order,
                 'SOURCE'    : 'QQ'}
         DB.put_song(songid = x['songid'], songname = x['songname'],
@@ -58,7 +58,7 @@ def api_v1_post_search():
     html += '</tbody>'
     return Response(response = html, status = 200)
 
-@app.route('/api/v1/play', methods = ['GET'])
+@app.route('/play', methods = ['GET'])
 def api_v1_get_play():
     logging.debug(request.args)
     _id = request.args.get('songid')
