@@ -35,6 +35,13 @@ class SQLiteDB(object):
         return self.cursor.fetchone()
 
     def put_song(self, songid, songname, songurl, singername, songimageurl):
+        sql = 'DELETE FROM song WHERE songid = ?'
+        try:
+            self.cursor.execute(sql, (songid, ))
+            self.connect.commit()
+        except sqlite3.Error as e:
+            logging.error(e)
+
         data = (songid, songname, songurl, singername, songimageurl)
         sql = 'INSERT INTO song VALUES(?,?,?,?,?)'
         try:
