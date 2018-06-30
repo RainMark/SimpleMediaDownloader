@@ -39,6 +39,7 @@ class QQApi(object):
             simple_song_dict['songname'] = x['songname']
             simple_song_dict['albumurl'] = self.album_url + x['albummid'] + '.jpg'
             simple_song_dict['songmid'] = x['songmid']
+            simple_song_dict['media_mid'] = x['media_mid']
             simple_singer_list = []
             for k in x['singer']:
                 simple_singer_list.append(k['name'])
