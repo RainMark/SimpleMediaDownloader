@@ -47,10 +47,10 @@ def api_v1_post_search():
 
         info = {'SONG_NAME' : x['songname'] + ' - ' + Api.Singer(x),
                 'SONG_URL'  : Api.RewriteUrl(qqmusicurl),
-                'PLAY_URL'  : '/play?songid=' + x['songid'],
+                'PLAY_URL'  : '/play?songid=' + x['songmid'],
                 'ORDER'     : order,
                 'SOURCE'    : 'QQ'}
-        DB.put_song(songid = x['songid'], songname = x['songname'],
+        DB.put_song(songmid = x['songmid'], media_mid = x['media_mid'], songname = x['songname'],
                     songurl = info['SONG_URL'], singername = Api.Singer(x),
                     songimageurl = x['albumurl'])
         html += st.render(info)
@@ -70,10 +70,10 @@ def api_v1_get_play():
 
     st = SimpleTemplate()
     st.load_from_file('../site/template/player.jinja2')
-    var = {'SONG_NAME' : song[1],
-           'SONG_URL'  : song[2],
-           'SONG_IMAGE': song[3],
-           'SINGER'    : song[4]}
+    var = {'SONG_NAME' : song[2],
+           'SONG_URL'  : song[3],
+           'SONG_IMAGE': song[4],
+           'SINGER'    : song[5]}
     return Response(response = st.render(var), status = 200)
 
 if __name__ == '__main__':
