@@ -41,7 +41,7 @@ def api_v1_post_search():
     html = '<tbody id=\"table-body\">'
     order = 1
     for x in result:
-        qqmusicurl = Api.GetMediaUrl(x['songid'])
+        qqmusicurl = Api.GetMediaUrl(x['songmid'], x['media_mid'])
         if not qqmusicurl:
             continue
 
