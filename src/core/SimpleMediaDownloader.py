@@ -23,7 +23,7 @@ def api_v1_error():
     error_message = 'Unexpected error'
     return Response(response = error_message, status = 404)
 
-@app.route('/api/v1/search', methods = ['POST'])
+@app.route('/search', methods = ['POST'])
 def api_v1_post_search():
     logging.info(request.form)
     kv_pair = request.form
@@ -59,7 +59,7 @@ def api_v1_post_search():
 
     return Response(response = html, status = 200)
 
-@app.route('/api/v1/play/<_id>', methods = ['GET'])
+@app.route('/play/<_id>', methods = ['GET'])
 def api_v1_get_play(_id):
     logging.info(_id)
     if not _id:
