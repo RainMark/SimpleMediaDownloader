@@ -6,12 +6,9 @@ from Network import Network
 class QQApi(object):
     def __init__(self):
         self.search_url = 'https://c.y.qq.com/soso/fcgi-bin/search_cp?'
-        self.musicexpress_url = 'https://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?'
+        self.musicexpress_url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?'
         self.download_url = 'http://dl.stream.qqmusic.qq.com/'
         self.network = Network()
-        self.size_map = {
-            'size128':'M500',
-            'size320':'M800'}
 
     def Search(self, keyword, page, limit = 10):
         param = {
@@ -39,7 +36,8 @@ class QQApi(object):
         for x in song_list:
             simple_song_dict = {}
             simple_song_dict['songname'] = x['songname']
-            simple_song_dict['songid'] = x['songmid']
+            simple_song_dict['songmid'] = x['songmid']
+            simple_song_dict['media_mid'] = x['media_mid']
             simple_singer_list = []
             for k in x['singer']:
                 simple_singer_list.append(k['name'])
@@ -48,33 +46,40 @@ class QQApi(object):
 
         return simple_song_list
 
-    def GetMediaUrl(self, songid, size = 'size320'):
+    def GetMediaUrl(self, songmid, media_mid):
+        uin = int(random.random() * 1000000000)
         guid = int(random.random() * 1000000000)
+        filename = 'C400' + str(media_mid) + '.m4a'
         param = {
-            'json':3,
-            'guid':guid}
+            'cid' : '205361747',
+            'format': 'json',
+            'uin': uin,
+            'songmid': songmid,
+            'filename': filename,
+            'guid': guid}
         uri = self.musicexpress_url + self.network.urlencode(param)
         js_data = self.network.urlrequest(uri)
         if not js_data:
             return None
         length = len(js_data)
-        data = json.loads(js_data[13:length - 2])
-        url = self.download_url + self.size_map[size] + songid + '.mp3?'
+        data = json.loads(js_data)['data']
+        url = self.download_url + filename + '?'
         param = {
-            'vkey':data['key'],
-            'guid':guid,
-            'fromtag':30}
+            'uin': uin,
+            'vkey': data['items'][0]['vkey'],
+            'guid': guid,
+            'fromtag': 66}
         return url + self.network.urlencode(param)
 
 if __name__ == '__main__':
     Api = QQApi()
-    songlist = Api.Search('我是一只鱼', 1)
+    songlist = Api.Search('醒来', 1)
     if not songlist:
         sys.exit()
 
     for x in songlist:
         print(x)
-        url = Api.GetMediaUrl(x['songid'])
+        url = Api.GetMediaUrl(x['songmid'], x['media_mid'])
         print(url)
 
 

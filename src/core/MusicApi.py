@@ -11,12 +11,11 @@ class MusicApi(object):
         else:
             self.Api = QQApi()
 
-    def Search(self, search_key, page = 1, limit = 8):
+    def Search(self, search_key, page = 1, limit = 10):
         return self.Api.Search(search_key, page, limit)
 
-
-    def GetMediaUrl(self, _id, size = 'size320'):
-        return self.Api.GetMediaUrl(_id, size)
+    def GetMediaUrl(self, songmid, media_mid):
+        return self.Api.GetMediaUrl(songmid, media_mid)
 
     def Singer(self, simple_song_dict):
         singer = simple_song_dict['singername']

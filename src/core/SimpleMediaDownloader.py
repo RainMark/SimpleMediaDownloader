@@ -45,14 +45,14 @@ def api_v1_post_search():
     order = 1
     for x in result:
         display_name = x['songname'] + ' - ' + Api.Singer(x)
-        qqmusicurl = Api.GetMediaUrl(x['songid'])
+        qqmusicurl = Api.GetMediaUrl(x['songmid'], x['media_mid'])
         if not qqmusicurl:
             continue
 
         url = '/qqmusic' + qqmusicurl.split('dl.stream.qqmusic.qq.com')[1]
         html += html_template.render_search_html(order = order, song_name = display_name, download_url = url,
-                                                    play_url = '/play/{}'.format(x['songid']))
-        DB.put_song(songid = x['songid'], songname = display_name,
+                                                 play_url = '/play/{}'.format(x['songmid']))
+        DB.put_song(songmid = x['songmid'], media_mid = x['media_mid'], songname = display_name,
                     songurl = url, singername = Api.Singer(x), songimageurl = Api.Image(x))
         order += 1
     html += '</tbody>'
@@ -69,8 +69,8 @@ def api_v1_get_play(_id):
     info = DB.get_song(_id)
     if not info:
         return api_v1_error()
-    html = template.render_player_html(song_name = info[1], download_url = info[2],
-                                song_image = info[3], singer_name = info[4])
+    html = template.render_player_html(song_name = info[2], download_url = info[3],
+                                song_image = info[4], singer_name = info[5])
     return Response(response = html, status = 200)
 
 
