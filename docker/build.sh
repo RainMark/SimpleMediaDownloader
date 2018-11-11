@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build  . -t simple-media-dl:latest
+docker build  . --no-cache -t simple-media-dl:latest
