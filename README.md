@@ -20,7 +20,7 @@ $ docker run -dt --rm --name dl -p 10086:80 simple-media-dl entry.sh --server lo
 
 <center>
 <figure class="half">
-    <img src="https://github.com/RainMark/SimpleMediaDownloader/raw/master/pic/index.png" width="300"/>
-    <img src="https://github.com/RainMark/SimpleMediaDownloader/raw/master/pic/subpage.png"width="300"/>
+    <img src="https://github.com/RainMark/SimpleMediaDownloader/raw/master/pic/index.png" width="200"/>
+    <img src="https://github.com/RainMark/SimpleMediaDownloader/raw/master/pic/subpage.png"width="200"/>
 </figure>
 </center>
