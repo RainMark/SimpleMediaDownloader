@@ -1,10 +1,9 @@
 ## Simple Media Downloader
 
-![](https://github.com/RainMark/SimpleMediaDownloader/raw/master/pic/index.png)
-
----
-
-![](https://github.com/RainMark/SimpleMediaDownloader/raw/master/pic/subpage.png)
+<figure class="half">
+    <img src="https://github.com/RainMark/SimpleMediaDownloader/raw/master/pic/index.png">
+    <img src="https://github.com/RainMark/SimpleMediaDownloader/raw/master/pic/subpage.png">
+</figure>
 
 ---
 
